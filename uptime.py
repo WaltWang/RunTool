@@ -1,11 +1,10 @@
 import os
 import socket
-import sys
 import time
-
 import ntplib
 
 __author__ = "Wang MingJun"
+
 
 def gettimestr(ts=None):
     if ts == None:
@@ -81,9 +80,10 @@ def getnpttime(addr='ntp.api.bz'):
 
 
 def setostime(ts):
-    _date = time.strftime('%Y-%m-%d', time.localtime(ts))
-    _time = time.strftime('%X', time.localtime(ts))
-    os.system('date {} && time {}'.format(_date, _time))
+    # _date = time.strftime('%Y-%m-%d', time.localtime(ts))
+    # _time = time.strftime('%X', time.localtime(ts))
+    # os.system('date {} && time {}'.format(_date, _time))
+    os.system(time.strftime('date %Y-%m-%d && time %X', time.localtime(ts)))
 
 
 def upostime(addr='ntp.api.bz'):
@@ -92,13 +92,14 @@ def upostime(addr='ntp.api.bz'):
     if response:
         ts = response.tx_time
         setostime(ts)
-        print("NTP Time:" + gettimestr(ts))
-        print("local Time:" + gettimestr())
+        print("NTP Time:", gettimestr(ts))
+        print("local Time:", gettimestr())
     else:
         print("NTP [%s] NoGet" % addr)
 
 
 if __name__ == '__main__':
+    import sys
     defntp = 's1a.time.edu.cn'
 
     if len(sys.argv) > 1:
