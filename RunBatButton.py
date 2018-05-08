@@ -15,6 +15,7 @@ from PyQt5.QtWidgets import (QApplication, QFormLayout, QGridLayout, QGroupBox,
                              QVBoxLayout, QWidget, QComboBox)
 
 from uptime import upostime
+from task import taskkill
 
 ConfigFileName = "RunTool.yaml"
 MaxLogRows = 10
@@ -224,22 +225,34 @@ class WinMain(QWidget):
         self.addlog("gettoken " + self.token)
         return self.token
 
+    def doattcon(self, dotype, cmd):
+        if hasattr(self, dotype):
+            getattr(self, dotype)(cmd)
+        else:
+            print("Not Find Attcon: " + dotype )
+
     def docmd(self, cmd):
         os.chdir(self.workdir)
         os.system(cmd)
         self.addlog("docmd " + cmd)
 
+    def dokillall(self, cmd):
+        #os.chdir(self.workdir)
+        #os.system(cmd)
+        taskkill(self.workdir)
+        self.addlog("dokillall " + cmd)
+
     def line1button_click(self, idx):
-        print("idx=", idx)
-        bat = self.buttonconfig[idx]['cmd']
+        #print("idx=", idx)
+        dotype = self.buttonconfig[idx]['type']
+        cmd = self.buttonconfig[idx]['cmd']
         if idx == 0:
-            if self.radio1.isChecked():
+            if self.timeautoup and self.radio1.isChecked():
                 self.uptime()
             token = self.gettoken()
-            self.docmd(bat + " " + token)
+            self.doattcon(dotype, cmd + " " + token)
         else:
-            self.docmd(bat)
-
+            self.doattcon(dotype, cmd)
 
 if __name__ == '__main__':
 

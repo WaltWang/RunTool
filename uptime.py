@@ -6,9 +6,7 @@ import ntplib
 __author__ = "Wang MingJun"
 
 
-def gettimestr(ts=None):
-    if ts == None:
-        ts = time.time()
+def gettimestr(ts=time.time()):
     return time.strftime("%Y-%m-%d %X", time.localtime(ts))
 
 
